@@ -1,0 +1,8 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+
+# Python temporary files
+__pycache__/
+*.pyc
+.venv/

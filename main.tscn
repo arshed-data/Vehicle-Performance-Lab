@@ -1,0 +1,185 @@
+[gd_scene format=3 uid="uid://begl4n2yx880t"]
+
+[ext_resource type="Script" uid="uid://bomfbwdsmipp0" path="res://car.gd" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://ck7rsob7hcdno" path="res://track_path.gd" id="2_0xm2m"]
+[ext_resource type="PackedScene" uid="uid://26fdhduygjfm" path="res://assets/cars/sedan-sports.glb" id="2_1bvp3"]
+[ext_resource type="Script" uid="uid://crk6x554r7a7u" path="res://hud.gd" id="3_h2yge"]
+[ext_resource type="Script" uid="uid://uo4g3jxsappf" path="res://lap_detector.gd" id="5_lquwl"]
+[ext_resource type="Script" uid="uid://nmqefy0xunwx" path="res://telemetry_recorder.gd" id="6_7mycd"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_ql73s"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_v0s4m"]
+size = Vector3(1.514209, 1.2, 2.7069092)
+
+[sub_resource type="Curve3D" id="Curve3D_ig7tw"]
+closed = true
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -63.33229, 0, -313.6929, 0, 0, 0, 0, 0, 0, 65.31143, 0, -408.69116, 0, 0, 0, 0, 0, 0, 334.47357, 0, -319.63016, 0, 0, 0, 0, 0, 0, 370.0981, 0, 78.1758, 0, 0, 0, 0, 0, 0, 227.6004, 0, 327.5467, 0, 0, 0, 0, 0, 0, -191.97601, 0, 363.1711, 0, 0, 0, 0, 0, 0, -400.82993, 0, 50.693203, 0, 0, 0, 0, 0, 0, -406.33148, 0, -189.80475, 0, 0, 0, 0, 0, 0, -251.35017, 0, -428.48273),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 9
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1bvp3"]
+albedo_color = Color(0, 0.42532945, 0.16553235, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v0s4m"]
+albedo_color = Color(0.13725491, 0.27058825, 0.05490196, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ql73s"]
+size = Vector2(1000, 1000)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ycj30"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_sdhfp"]
+size = Vector3(5.964966, 0.65077007, 0.001)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ql73s"]
+size = Vector3(6, 2, 1)
+
+[node name="Main" type="Node3D" unique_id=990626202]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+
+[node name="Car" type="CharacterBody3D" parent="." unique_id=1249560913]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -402.7064, 0.031739958, -17.128819)
+script = ExtResource("1_ig7tw")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Car" unique_id=2086497637]
+visible = false
+mesh = SubResource("BoxMesh_ql73s")
+
+[node name="Camera3D" type="Camera3D" parent="Car" unique_id=2178934]
+transform = Transform3D(10, 0, 0, 0, 8.191521, 5.7357645, 0, -5.7357645, 8.191521, 0, 8, 10)
+
+[node name="sedan-sports" parent="Car" unique_id=35496804 instance=ExtResource("2_1bvp3")]
+transform = Transform3D(-0.99998426, -0.005221675, -0.0020905752, -0.005221663, 0.9999866, -1.0917199e-05, 0.0020906038, -7.505523e-10, -0.9999978, 0.0953064, 0.12695968, 0.5871887)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Car" unique_id=467043332]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0954895, 0, 0.45355034)
+shape = SubResource("BoxShape3D_v0s4m")
+
+[node name="TrackPath" type="Path3D" parent="." unique_id=1162040438]
+curve = SubResource("Curve3D_ig7tw")
+script = ExtResource("2_0xm2m")
+
+[node name="TrackMesh" type="MeshInstance3D" parent="TrackPath" unique_id=1026071768]
+material_override = SubResource("StandardMaterial3D_1bvp3")
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=773766961]
+script = ExtResource("3_h2yge")
+
+[node name="SpeedLabel" type="Label" parent="HUD" unique_id=802023115]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 128.0
+offset_bottom = 113.0
+theme_override_font_sizes/font_size = 32
+text = "0 km/h
+"
+
+[node name="ThrottleLabel" type="Label" parent="HUD" unique_id=1755655400]
+offset_left = 20.0
+offset_top = 65.0
+offset_right = 159.0
+offset_bottom = 93.0
+theme_override_font_sizes/font_size = 20
+text = "THROTTLE: 0%"
+
+[node name="BrakeLabel" type="Label" parent="HUD" unique_id=812483418]
+offset_left = 20.0
+offset_top = 95.0
+offset_right = 123.0
+offset_bottom = 154.0
+theme_override_font_sizes/font_size = 20
+text = "BRAKE: 0%
+"
+
+[node name="AccelerationLabel" type="Label" parent="HUD" unique_id=566602514]
+offset_left = 20.0
+offset_top = 125.0
+offset_right = 212.0
+offset_bottom = 174.0
+text = "ACCELERATION: 0.0  m/s²
+"
+
+[node name="ZeroToThirtyLabel" type="Label" parent="HUD" unique_id=239875306]
+offset_left = 20.0
+offset_top = 155.0
+offset_right = 60.0
+offset_bottom = 178.0
+text = "0-30 km/h: READY
+"
+
+[node name="BrakeDistanceLabel" type="Label" parent="HUD" unique_id=1428252054]
+offset_left = 20.0
+offset_top = 185.0
+offset_right = 60.0
+offset_bottom = 208.0
+text = "BRAKING DISTANCE: READY "
+
+[node name="LapLabel" type="Label" parent="HUD" unique_id=1038566522]
+offset_left = 19.0
+offset_top = 215.0
+offset_right = 66.0
+offset_bottom = 238.0
+text = "LAP: 0"
+
+[node name="CurrentLapLabel" type="Label" parent="HUD" unique_id=609983489]
+offset_left = 20.0
+offset_top = 245.0
+offset_right = 146.0
+offset_bottom = 268.0
+text = "CURRENT: 0.00 s"
+
+[node name="LastLapLabel" type="Label" parent="HUD" unique_id=1955746500]
+offset_left = 20.0
+offset_top = 275.0
+offset_right = 88.0
+offset_bottom = 298.0
+text = "LAST: -- s"
+
+[node name="BestLapLabel" type="Label" parent="HUD" unique_id=1029341958]
+offset_left = 20.0
+offset_top = 305.0
+offset_right = 89.0
+offset_bottom = 328.0
+text = "BEST: -- s"
+
+[node name="BrakeTimeLabel" type="Label" parent="HUD" unique_id=1942679421]
+offset_left = 700.0
+offset_top = 60.0
+offset_right = 845.0
+offset_bottom = 83.0
+text = "BRAKING TIME: -- S"
+
+[node name="BrakeDistanceLabel2" type="Label" parent="HUD" unique_id=112213592]
+offset_left = 700.0
+offset_top = 30.0
+offset_right = 890.0
+offset_bottom = 79.0
+text = "BRAKING DISTANCE: -- m
+"
+
+[node name="Ground" type="MeshInstance3D" parent="." unique_id=1471569143]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.7448807, -0.050000004, -8.859947)
+material_override = SubResource("StandardMaterial3D_v0s4m")
+mesh = SubResource("PlaneMesh_ql73s")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1648743217]
+transform = Transform3D(0.8660254, 0.43301272, -0.24999999, 0, 0.49999997, 0.86602545, 0.5, -0.75, 0.43301266, 0, 0, 0)
+light_energy = 1.5
+
+[node name="StartFinishLine" type="MeshInstance3D" parent="." unique_id=1450995530]
+transform = Transform3D(0.9999946, 0.00017834772, 0.0033082394, -0.00017294804, 0.9999987, -0.0016361254, -0.0033085272, 0.0016355445, 0.9999932, -402.72763, 0.33763176, -18.651932)
+material_override = SubResource("StandardMaterial3D_ycj30")
+mesh = SubResource("BoxMesh_sdhfp")
+
+[node name="LapDetector" type="Area3D" parent="." unique_id=1893373957]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -402.40945, 0, -18.650995)
+script = ExtResource("5_lquwl")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LapDetector" unique_id=1750252039]
+shape = SubResource("BoxShape3D_ql73s")
+
+[node name="TelemetryRecorder" type="Node" parent="." unique_id=2052391037]
+script = ExtResource("6_7mycd")
